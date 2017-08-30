@@ -3,7 +3,7 @@ This is an example of how to parse date and time using MomentJS and SugarJS.
 
 ## Prerequisites
 1. Ensure you have an account with [Converse.AI](http://www.converse.ai/)
-2. Converse.AI extensions run on **Node.JS** `v6.11.1` so ensure your development environment matches this setup. We recommend installing Node.JS via [Node Version Manager (NVM)](https://github.com/creationix/nvm).
+2. Converse.AI extensions run on **Node.JS** `v6.11.1` on **Alpine Linux** so ensure your node development environment matches this setup. We recommend installing Node.JS via [Node Version Manager (NVM)](https://github.com/creationix/nvm).
 3. Install and Authorize [Converse.AI CLI tool](https://dash.readme.io/project/converseai/v2/docs/converse-ai-cli).
 
 ## Install
