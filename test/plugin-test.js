@@ -12,7 +12,7 @@ const request     = require('supertest');
 const expect      = require('chai').expect;
 const server      = require('./lib/express');
 
-describe('Moment.js', function () {
+describe('Date Time Parser', function () {
 
   it('Responds to /', function(done) {
     request(server)
