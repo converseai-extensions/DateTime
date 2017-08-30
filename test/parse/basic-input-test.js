@@ -1,5 +1,5 @@
 /**
- * @file test/parse-test.js
+ * @file test/basic-input-test.js
  * @author graeme@converse.ai
  * @description Parse a date from any format.
  *

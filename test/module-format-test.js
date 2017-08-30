@@ -1,5 +1,5 @@
 /**
- * @file test/format-test.js
+ * @file test/module-format-test.js
  * @author graeme@converse.ai
  * @description This module will format any date or time to a human
  * readable form.
