@@ -1,7 +1,7 @@
 {
   "name": "momentjs",
-  "displayName": "Moment.js",
-  "description": "Parse, validate, manipulate, and display dates and times via moment.js",
+  "displayName": "Date Time Parser",
+  "description": "Parse, validate, manipulate, and display dates and times via Moment.JS and Sugar.JS",
   "documentLink": "",
   "providerData": [],
   "module": [
