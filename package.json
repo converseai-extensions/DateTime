@@ -1,0 +1,29 @@
+{
+  "name": "momentjs",
+  "description": "Parse, validate, manipulate, and display dates and times in via moment.js",
+  "main": "plugin.js",
+  "author": "graeme@converse.ai",
+  "scripts": {
+    "test": "mocha test/plugin-test.js 'test/**/*-test.js'",
+    "test-debug": "DEBUG=test*,date* mocha test/plugin-test.js 'test/**/*-test.js'",
+    "test-debug-win": "set DEBUG=test*,date* mocha test/plugin-test.js 'test/**/*-test.js'",
+    "zones": "node dev/zones.js"
+  },
+  "dependencies": {
+    "@converseai/plugins-sdk": "latest",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "moment-parseformat": "^2.2.0",
+    "moment-timezone": "^0.5.13",
+    "sugar-date": "^2.0.4"
+  },
+  "devDependencies": {
+    "body-parser": "latest",
+    "chai": "latest",
+    "chai-match": "^1.1.1",
+    "debug": "^2.6.8",
+    "express": "latest",
+    "mocha": "latest",
+    "supertest": "latest"
+  }
+}
