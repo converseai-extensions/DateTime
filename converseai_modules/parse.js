@@ -63,37 +63,40 @@ module.exports = function parse (app, body) {
   }
 
   var date = Utils.utc(input, o, locale);
-
+  var value;
 
   if (date && date.isValid()) {
-    /*
-    * Set an object on the response. This object will be returned to and stored
-    * on the current conversation state. It is important to ensure the JSON
-    * definition of this module has `hasReturn` set to true. E.g. if this module
-    * is fired from a state called `myState` then the object can be accessed with
-    * handlebars like:
-    * {{states.myState.momentjs.parse}}
-    */
-
     var utc = date.clone().utc();
     var local = date.clone();
-    response.setValue(_.assign(local.toObject(), {
+    value = _.assign(local.toObject(), {
       //Making months 1-based instead of 0-based. Need to do the same when coming to setting dates.
       months: local.toObject().months + 1,
       iso: local.format(Utils.ISO_8601),
       utc: utc.format(Utils.ISO_8601),
       unix: utc.unix(),
-      offset: local.format('Z')
-    }));
-
-    /*
-    * This will return a success status and response to the conversation.
-    * It is important to always call this method when the module has finished
-    * computing regardless of whether you wish to send a response or not. If not,
-    * the conversation will hang indefinitely.
-    */
-    app.send(Status.SUCCESS, response);
+      offset: local.format('Z'),
+      isValid: true
+    });
   } else {
-    app.send(Status.FAIL);
+    value = { 
+      isValid: false
+    };
   }
+
+  /*
+  * Set an object on the response. This object will be returned to and stored
+  * on the current conversation state. It is important to ensure the JSON
+  * definition of this module has `hasReturn` set to true. E.g. if this module
+  * is fired from a state called `myState` then the object can be accessed with
+  * handlebars like:
+  * {{states.myState.momentjs.parse}}
+  */
+  response.setValue(value);
+  /*
+  * This will return a success status and response to the conversation.
+  * It is important to always call this method when the module has finished
+  * computing regardless of whether you wish to send a response or not. If not,
+  * the conversation will hang indefinitely.
+  */
+  app.send(Status.SUCCESS, response);
 };

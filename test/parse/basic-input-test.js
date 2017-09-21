@@ -8,6 +8,8 @@
  */
 
 const test = require('./request-parse');
+const chai        = require('chai');
+const expect      = chai.expect; chai.use(require('chai-match'));
 
 describe('Parse Basic', function () {
 
@@ -18,7 +20,22 @@ describe('Parse Basic', function () {
   * * * * * * * * * * * * * * * * * */
 
   it('without input', function(done) {
-    test({}, {}, done);
+    test({}, {isValid: true}, done);
+  })
+
+
+  /* * * * * * * * * * * * * * * * * *
+  * With broken input
+  * * * * * * * * * * * * * * * * * */
+
+  it('with broken input', function(done) {
+    test({
+      input: 'Hello, World!'
+    }, function(err, res) {
+      expect(res.body).to.have.property('status').to.equal(0);
+      expect(res.body).to.have.property('value').to.have.property('isValid').to.equal(false);
+      done();
+    }, done);
   })
 
   /* * * * * * * * * * * * * * * * * *
@@ -42,7 +59,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000
+      unix: 1499031000,
+      isValid: true
     }, done);
   })
 
@@ -64,7 +82,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T00:00:00+00:00',
       utc: '2017-07-02T00:00:00+00:00',
-      unix: 1498953600
+      unix: 1498953600,
+      isValid: true
     }, done);
   })
 
@@ -86,7 +105,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-13T00:00:00+00:00',
       utc: '2017-07-13T00:00:00+00:00',
-      unix: 1499904000
+      unix: 1499904000,
+      isValid: true
     }, done);
   })
 
@@ -103,6 +123,7 @@ describe('Parse Basic', function () {
       seconds: 0,
       milliseconds: 0,
       offset: '+00:00',
+      isValid: true
     }, done);
   })
 
@@ -124,7 +145,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000
+      unix: 1499031000,
+      isValid: true
     }, done);
   })
 
@@ -146,7 +168,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T00:00:00+00:00',
       utc: '2017-07-02T00:00:00+00:00',
-      unix: 1498953600
+      unix: 1498953600,
+      isValid: true
     }, done);
   })
 
@@ -167,7 +190,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000
+      unix: 1499031000,
+      isValid: true
     }, done);
   })
 
@@ -188,7 +212,8 @@ describe('Parse Basic', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 
@@ -209,7 +234,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000
+      unix: 1499031000,
+      isValid: true
     }, done);
   })
 
@@ -230,7 +256,8 @@ describe('Parse Basic', function () {
       offset: '+00:00',
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000
+      unix: 1499031000,
+      isValid: true
     }, done);
   })
 
@@ -255,7 +282,8 @@ describe('Parse Basic', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 
@@ -276,7 +304,8 @@ describe('Parse Basic', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 
@@ -297,7 +326,8 @@ describe('Parse Basic', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 
@@ -318,7 +348,8 @@ describe('Parse Basic', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 });

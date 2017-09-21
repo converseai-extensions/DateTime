@@ -44,7 +44,8 @@ describe('Parsed', function () {
       offset: '+00:00',
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000
+      unix: 1499031000,
+      isValid: true
     }, done);
   })
 
@@ -81,7 +82,8 @@ describe('Parsed', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 
@@ -114,7 +116,8 @@ describe('Parsed', function () {
       offset: '-07:00',
       iso: '2017-07-02T21:30:00-07:00',
       utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200
+      unix: 1499056200,
+      isValid: true
     }, done);
   })
 

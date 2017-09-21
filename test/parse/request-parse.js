@@ -20,32 +20,37 @@ module.exports = function(input, expected, done) {
     .set('X_CONVERSE_APP_TOKEN', APP_TOKEN)
     .expect(200)
     .end(function(err, res) {
-      debug(input);
-      debug(res.body.value);
-      expect(res.body).to.have.property('status').to.equal(0);
-      expect(res.body).to.have.property('value');
-      expect(res.body.value).to.have.property('years').to.match(/\d{4}/);
-      expect(res.body.value).to.have.property('months').to.match(/\d/);
-      expect(res.body.value).to.have.property('date').to.match(/\d/);
-      expect(res.body.value).to.have.property('hours').to.match(/\d/);
-      expect(res.body.value).to.have.property('minutes').to.match(/\d/);
-      expect(res.body.value).to.have.property('seconds').to.match(/\d/);
-      expect(res.body.value).to.have.property('milliseconds').to.match(/\d/);
-      expect(res.body.value).to.have.property('offset').to.match(/[+-]\d{2}:\d{2}/);
-      expect(res.body.value).to.have.property('iso').to.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/);
-      expect(res.body.value).to.have.property('utc').to.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/);
-      expect(res.body.value).to.have.property('unix').to.match(/\d{10}/);
+      if (_.isFunction(expected)) {
+        expected(err, res, done);
+      } else {
+        debug(input);
+        debug(res.body.value);
+        expect(res.body).to.have.property('status').to.equal(0);
+        expect(res.body).to.have.property('value');
+        expect(res.body.value).to.have.property('years').to.match(/\d{4}/);
+        expect(res.body.value).to.have.property('months').to.match(/\d/);
+        expect(res.body.value).to.have.property('date').to.match(/\d/);
+        expect(res.body.value).to.have.property('hours').to.match(/\d/);
+        expect(res.body.value).to.have.property('minutes').to.match(/\d/);
+        expect(res.body.value).to.have.property('seconds').to.match(/\d/);
+        expect(res.body.value).to.have.property('milliseconds').to.match(/\d/);
+        expect(res.body.value).to.have.property('offset').to.match(/[+-]\d{2}:\d{2}/);
+        expect(res.body.value).to.have.property('iso').to.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/);
+        expect(res.body.value).to.have.property('utc').to.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/);
+        expect(res.body.value).to.have.property('unix').to.match(/\d{10}/);
+        expect(res.body.value).to.have.property('isValid');
 
-      for (var key in expected) {
-        if (expected.hasOwnProperty(key)) {
-          if (_.isFunction(expected[key])) {
-            expected[key](res.body.value);
-          } else {
-            expect(res.body.value[key]).to.equal(expected[key]);
+        for (var key in expected) {
+          if (expected.hasOwnProperty(key)) {
+            if (_.isFunction(expected[key])) {
+              expected[key](res.body.value);
+            } else {
+              expect(res.body.value[key]).to.equal(expected[key]);
+            }
           }
         }
-      }
 
-      done();
+        done();
+      }
     });
 }

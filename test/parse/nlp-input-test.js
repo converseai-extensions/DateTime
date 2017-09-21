@@ -39,7 +39,8 @@ describe('Parse NLP', function () {
       offset: '+00:00',
       iso: ({iso}) => {
         expect(moment.parseZone(iso).format('dddd')).to.equal('Tuesday');
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -57,7 +58,8 @@ describe('Parse NLP', function () {
       offset: '-07:00',
       iso: ({iso}) => {
         expect(moment.parseZone(iso).format('dddd')).to.equal('Tuesday');
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -75,7 +77,8 @@ describe('Parse NLP', function () {
       offset: '-07:00',
       iso: ({iso}) => {
         expect(moment.parseZone(iso).format('dddd')).to.equal('Tuesday');
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -93,7 +96,8 @@ describe('Parse NLP', function () {
       offset: '-07:00',
       iso: ({iso}) => {
         expect(moment.parseZone(iso).format('dddd')).to.equal('Tuesday');
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -112,6 +116,7 @@ describe('Parse NLP', function () {
         expect(value.format()).to.equal(expected.format());
       },
       offset: '+00:00',
+      isValid: true
     }, done);
   })
 
@@ -129,7 +134,8 @@ describe('Parse NLP', function () {
         var value = moment.parseZone(iso).add(2, 'minutes');
         var expected = moment.utc(now().utc);
         expect(value.format()).to.equal(expected.format());
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -146,7 +152,8 @@ describe('Parse NLP', function () {
         var value = moment.parseZone(iso).add(2, 'minutes');
         var expected = moment.utc(now().utc).utcOffset('-07:00');
         expect(value.format()).to.equal(expected.format());
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -162,7 +169,8 @@ describe('Parse NLP', function () {
         var value = moment.parseZone(iso).subtract(20, 'seconds');
         var expected = moment.utc(now().utc).utcOffset('-07:00')
         expect(value.format()).to.equal(expected.format());
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -178,7 +186,8 @@ describe('Parse NLP', function () {
         var value = moment.parseZone(iso);
         var expected = moment.utc(now().utc).utcOffset('-07:00')
         expect(value.format()).to.equal(expected.format());
-      }
+      },
+      isValid: true
     }, done);
   })
 
@@ -194,7 +203,8 @@ describe('Parse NLP', function () {
         var value = moment.parseZone(iso);
         var expected = moment.utc(now().utc).utcOffset('-07:00').startOf('day');
         expect(value.format()).to.equal(expected.format());
-      }
+      },
+      isValid: true
     }, done);
   })
 
