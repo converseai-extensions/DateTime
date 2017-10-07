@@ -7,11 +7,11 @@
  * Plugins SDK. https://developers.converse.ai/
  */
 
-const test = require('./request-parse');
+const test = require('../lib/request-parse');
 const chai        = require('chai');
 const expect      = chai.expect; chai.use(require('chai-match'));
 
-describe('Parse Basic', function () {
+describe('Parse – Basic Input', function () {
 
 
 
@@ -20,7 +20,11 @@ describe('Parse Basic', function () {
   * * * * * * * * * * * * * * * * * */
 
   it('without input', function(done) {
-    test({}, {isValid: true}, done);
+    test({}, function(err, res, done) {
+      expect(res.body).to.have.property('status').to.equal(1);
+      expect(res.body).to.have.property('error').to.have.property('httpStatus').to.equal(400);
+      done();
+    }, done);
   })
 
 
@@ -337,6 +341,48 @@ describe('Parse Basic', function () {
       offset: 'ZONE',
       custom_offset: undefined,
       timezone_offset: 'America/Los_Angeles'
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: '2017-07-02T21:30:00-07:00',
+      utc: '2017-07-03T04:30:00+00:00',
+      unix: 1499056200,
+      isValid: true
+    }, done);
+  })
+
+  it('with human input (Sunday 2nd July, 9:30pm) && location offset (47.650499, -122.350070)', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'LOCATION',
+      location_offset: '47.650499, -122.350070'
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: '2017-07-02T21:30:00-07:00',
+      utc: '2017-07-03T04:30:00+00:00',
+      unix: 1499056200,
+      isValid: true
+    }, done);
+  })
+
+  it('with ISO_8601 input (2017-07-02T21:30:00+00:00) && location offset (47.650499, -122.350070)', function(done) {
+    test({
+      input: '2017-07-02T21:30:00+00:00',
+      offset: 'LOCATION',
+      location_offset: '47.650499, -122.350070'
     }, {
       years: 2017,
       months: 7,

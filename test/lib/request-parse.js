@@ -7,13 +7,13 @@ const moment      = require('moment');
 const debug       = require('debug')('test:parse');
 const APP_TOKEN   = require('../../app-token');
 
-module.exports = function(input, expected, done) {
+module.exports = function(input, expected, done, moduleId = 'parse') {
   return request(server)
     .post('/')
     .send({
       event: 'MODULE_EXEC',
       payload: {
-        moduleId: 'parse',
+        moduleId: moduleId,
         moduleParam: input
       }
     })
@@ -37,6 +37,7 @@ module.exports = function(input, expected, done) {
         expect(res.body.value).to.have.property('offset').to.match(/[+-]\d{2}:\d{2}/);
         expect(res.body.value).to.have.property('iso').to.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/);
         expect(res.body.value).to.have.property('utc').to.match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/);
+        expect(res.body.value).to.have.property('unix').to.match(/\d{10}/);
         expect(res.body.value).to.have.property('unix').to.match(/\d{10}/);
         expect(res.body.value).to.have.property('isValid');
 

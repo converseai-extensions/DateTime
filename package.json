@@ -10,7 +10,8 @@
     "zones": "node dev/zones.js"
   },
   "dependencies": {
-    "@converseai/plugins-sdk": "latest",
+    "@converseai/plugins-sdk": "^1.0.3",
+    "geo-tz": "^3.3.3",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "moment-parseformat": "^2.2.0",

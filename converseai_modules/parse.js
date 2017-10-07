@@ -11,9 +11,9 @@
 
 const Status          = require('@converseai/plugins-sdk').Status;
 const ModuleResponse  = require('@converseai/plugins-sdk').Payloads.ModuleResponse;
-const _               = require('lodash');
 const Utils           = require('../lib/utils.js');
 const tz              = require('moment-timezone').tz;
+const geo             = require('geo-tz');
 
 
 module.exports = function parse (app, body) {
@@ -45,58 +45,58 @@ module.exports = function parse (app, body) {
   * Daylight savings will be included in offset calculation. */
   var timezoneOffset = body.payload.moduleParam.timezone_offset;
 
+  /** @type {String} locationOffset Specify a location from a latitude and
+  * longitude string separted by a comma (,). Daylight savings will be
+  * included in offset calculation. E.g. 47.650499,-122.350070 would be
+  * America/Los_Angeles. */
+  var locationOffset = body.payload.moduleParam.location_offset;
 
-  /** @type {ModuleResponse} response The Converse AI response to respond with. */
-  var response = new ModuleResponse();
+  if (input !== undefined && input !== null) {
+    /** @type {ModuleResponse} response The Converse AI response to respond with. */
+    var response = new ModuleResponse();
 
-  var o = offset;
-  switch (offset) {
-    case 'CUSTOM':
+    var isValidArguments = true;
+    var o = offset;
+    switch (offset) {
+      case 'CUSTOM':
       o = customOffset;
       break;
-    case 'ZONE':
-      o = tz.zone(timezoneOffset).offset(Utils.utc(input, 0)) * -1;
+      case 'LOCATION':
+      locationOffset = locationOffset && locationOffset.split(',');
+      if (locationOffset && locationOffset.length === 2) {
+        timezoneOffset = geo.tz(locationOffset[0].trim(), locationOffset[1].trim());
+      }
+      case 'ZONE':
+      if (timezoneOffset) {
+        o = tz.zone(timezoneOffset).offset(Utils.utc(input, 0)) * -1;
+      } else {
+        isValidArguments = false;
+      }
       break;
-    case 'NONE':
-    default:
+      case 'NONE':
+      default:
 
-  }
+    }
 
-  var date = Utils.utc(input, o, locale);
-  var value;
+    var date = Utils.utc(input, o, locale);
 
-  if (date && date.isValid()) {
-    var utc = date.clone().utc();
-    var local = date.clone();
-    value = _.assign(local.toObject(), {
-      //Making months 1-based instead of 0-based. Need to do the same when coming to setting dates.
-      months: local.toObject().months + 1,
-      iso: local.format(Utils.ISO_8601),
-      utc: utc.format(Utils.ISO_8601),
-      unix: utc.unix(),
-      offset: local.format('Z'),
-      isValid: true
-    });
+    /*
+    * Set an object on the response. This object will be returned to and stored
+    * on the current conversation state. It is important to ensure the JSON
+    * definition of this module has `hasReturn` set to true. E.g. if this module
+    * is fired from a state called `myState` then the object can be accessed with
+    * handlebars like:
+    * {{states.myState.momentjs.parse}}
+    */
+    response.setValue(Utils.encode(date));
+    /*
+    * This will return a success status and response to the conversation.
+    * It is important to always call this method when the module has finished
+    * computing regardless of whether you wish to send a response or not. If not,
+    * the conversation will hang indefinitely.
+    */
+    app.send(Status.SUCCESS, response);
   } else {
-    value = { 
-      isValid: false
-    };
+    app.fail({httpStatus: 400, code: 'REQUIRED_PARAMS_UNDEFINED', description: 'Required parameters are undefined.'});
   }
-
-  /*
-  * Set an object on the response. This object will be returned to and stored
-  * on the current conversation state. It is important to ensure the JSON
-  * definition of this module has `hasReturn` set to true. E.g. if this module
-  * is fired from a state called `myState` then the object can be accessed with
-  * handlebars like:
-  * {{states.myState.momentjs.parse}}
-  */
-  response.setValue(value);
-  /*
-  * This will return a success status and response to the conversation.
-  * It is important to always call this method when the module has finished
-  * computing regardless of whether you wish to send a response or not. If not,
-  * the conversation will hang indefinitely.
-  */
-  app.send(Status.SUCCESS, response);
 };

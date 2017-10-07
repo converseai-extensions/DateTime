@@ -1,6 +1,6 @@
 /**
  * @file test/lib/express.js
- * @author graeme@converse.ai
+ * @author graeme+admin@converse.ai
  *
  * A quick express server example of starting a server and passing the request
  * and response to the generated converse plugin `plugin.js`
@@ -13,7 +13,7 @@
 
 const express     = require('express');
 const bodyParser  = require('body-parser');
-const momentjs  = require('../../').momentjs;
+const momentjs  = require('../../').trevor10608_momentjs;
 
 var app = express();
 

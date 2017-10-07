@@ -10,9 +10,9 @@
 const moment  = require('moment');
 const chai    = require('chai');
 const expect  = chai.expect; chai.use(require('chai-match'));
-const test    = require('./request-parse');
+const test = require('../lib/request-parse');
 
-describe('Parse NLP', function () {
+describe('Parse – NLP Input', function () {
 
   var now = function() {
     var m = moment.utc();
