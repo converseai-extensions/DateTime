@@ -1,5 +1,5 @@
 {
-  "name": "momentjs",
+  "name": "date_time",
   "description": "Parse, validate, manipulate, and display dates and times in via moment.js",
   "main": "plugin.js",
   "author": "graeme@converse.ai",
