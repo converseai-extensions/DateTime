@@ -68,7 +68,7 @@ module.exports = function parse (app, body) {
       }
       case 'ZONE':
       if (timezoneOffset) {
-        o = tz.zone(timezoneOffset).offset(Utils.utc(input, 0)) * -1;
+        o = tz.zone(timezoneOffset).utcOffset(Utils.utc(input, 0)) * -1;
       } else {
         isValidArguments = false;
       }

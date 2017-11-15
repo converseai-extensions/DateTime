@@ -1,6 +1,6 @@
 {
-  "name": "momentjs",
-  "displayName": "Date Time Parser",
+  "name": "date_time",
+  "displayName": "Date/Time",
   "description": "Parse, validate, manipulate, and display dates and times via Moment.JS and Sugar.JS",
   "documentLink": "",
   "providerData": [],
@@ -1840,8 +1840,8 @@
       "param": [
         {
           "param": "input",
-          "displayName": "Parsed Date",
-          "description": "Accepts an 'ISO-8601' standard string, or the response from the Parse Date/Time module as input.",
+          "displayName": "Date",
+          "description": "A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
           "type": "STRING"
         },
         {
@@ -1882,8 +1882,8 @@
         },
         {
           "param": "other_input",
-          "displayName": "Reference Input",
-          "description": "A comparison date. Accepts the same date format as the Parsed Date input. If no input is given then the time at execution will be used.",
+          "displayName": "Reference Date",
+          "description": "A comparison date. If no input is given then the time at execution will be used. A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
           "type": "STRING",
           "hideExpression": "(model.format && model.format.value && model.format.value !== \"RELATIVE\") || false"
         }
@@ -1908,8 +1908,8 @@
         },
         {
           "param": "input",
-          "displayName": "Input",
-          "description": "Input date to be rounded. Human readable string, 'ISO-8601', 'RFC 2822', Unix Timestamp, or the output of another Parse Date/Time module.",
+          "displayName": "Date",
+          "description": "Date to be rounded to start or end of specified time unit. A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
           "type": "STRING",
           "optional": false
         },
@@ -1975,63 +1975,72 @@
       "hasReturn": true,
       "param": [
         {
-          "param": "add_or_sub",
-          "displayName": "Add or Subtract",
-          "description": "Manipulate the input date by choosing to add or subtract a unit of time.",
+          "param": "operation",
+          "displayName": "Operation",
+          "description": "Manipulate the input date by choosing to add, subtract, or set a unit of time.",
           "type": "ENUM",
           "optional": false,
           "value": [
             "Add",
-            "Subtract"
+            "Subtract",
+            "Set"
           ]
         },
         {
           "param": "input",
-          "displayName": "Input",
-          "description": "Input date to be manipulated. Human readable string, 'ISO-8601', 'RFC 2822', Unix Timestamp, or the output of Parse Date/Time module.",
+          "displayName": "Date",
+          "description": "Date to be manipulated. A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time.",
           "type": "STRING",
           "optional": false
         },
         {
           "param": "years",
           "displayName": "Years",
-          "description": "How many years to add or subtract from input date.",
+          "description": "How many years to add or subtract from input date. If using operation, Set, then sets the year (e.g. 2017).",
           "type": "NUMBER",
           "optional": true
         },
         {
           "param": "months",
           "displayName": "Months",
-          "description": "How many months to add or subtract from the input date.",
+          "description": "How many months to add or subtract from the input date. If using operation, Set, then sets the month (1 - 12).",
           "type": "NUMBER",
           "optional": true
         },
         {
           "param": "days",
           "displayName": "Days",
-          "description": "How many days to add or subtract from the input date.",
+          "description": "How many days to add or subtract from the input date. If using operation, Set, then sets the date of the month.",
           "type": "NUMBER",
           "optional": true
         },
         {
           "param": "hours",
           "displayName": "Hours",
-          "description": "How many hours to add or subtract from the input date.",
+          "description": "How many hours to add or subtract from the input date. If using operation, Set, then sets the hour (0 - 23).",
           "type": "NUMBER",
           "optional": true
         },
         {
           "param": "minutes",
           "displayName": "Minutes",
-          "description": "How many minutes to add or subtract from the input date.",
+          "description": "How many minutes to add or subtract from the input date. If using operation, Set, then sets the hour (0 - 59).",
           "type": "NUMBER",
           "optional": true
         },
         {
           "param": "seconds",
           "displayName": "Seconds",
-          "description": "How many seconds to add or subtract from the input date.",
+          "description": "How many seconds to add or subtract from the input date. If using operation, Set, then sets the hour (0 - 59).",
           "type": "NUMBER",
+          "optional": true
+        },
+        {
+          "param": "iso",
+          "displayName": "Duration",
+          "description": "A duration represented as ISO-8601 duration string or the output of the Compare Date/Time module.",
+          "type": "STRING",
+          "hideExpression": "(model.operation && model.operation.value && model.operation.value === \"Set\") || false",
           "optional": true
         }
       ]
@@ -2041,7 +2050,18 @@
       "name": "Check Date/Time",
       "description": "Check an input date against specified conditions and route your template accordingly.",
       "hasReturn": false,
+      "exits": [
+        "Success",
+        "Failed"
+      ],
       "param": [
+        {
+          "param": "input",
+          "displayName": "Date",
+          "description": "Date to be checked. A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
+          "type": "STRING",
+          "optional": false
+        },
         {
           "param": "condition",
           "displayName": "Condition",
@@ -2049,76 +2069,45 @@
           "type": "ENUM",
           "optional": false,
           "value": [
-            {"label": "Is Certain Day", "value": "isDay"},
-            {"label": "Is Before another Date", "value": "isBefore"},
-            {"label": "Is After another Date", "value": "isAfter"},
-            {"label": "Is Between two Dates", "value": "isBetween"},
-            {"label": "Is a Leap Year", "value": "isLeapYear"},
-            {"label": "Is a Daylight Savings Time", "value": "isDST"}
+            {
+              "label": "Day of Week",
+              "value": "isDay"
+            },
+            {
+              "label": "Is Before another Date",
+              "value": "isBefore"
+            },
+            {
+              "label": "Is After another Date",
+              "value": "isAfter"
+            },
+            {
+              "label": "Is Between two Dates",
+              "value": "isBetween"
+            },
+            {
+              "label": "Is a Leap Year",
+              "value": "isLeapYear"
+            }
           ]
         },
         {
-          "param": "input",
-          "displayName": "Input",
-          "description": "Input date to be checked. Human readable string, 'ISO-8601', 'RFC 2822', Unix Timestamp, or the output of Parse Date/Time module.",
-          "type": "STRING",
-          "optional": false
-        },
-        {
-          "param": "monday",
-          "displayName": "Monday",
-          "description": "Is the input date a Monday.",
-          "type": "BOOLEAN",
+          "param": "days",
+          "displayName": "Days to Check",
+          "description": "Add days you wish to check for. E.g. To check if the date lands on a western weekend, add 'Saturday' and 'Sunday'.",
+          "type": "TAG",
+          "allowArray": true,
+          "optional": true,
           "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
-        },
-        {
-          "param": "tuesday",
-          "displayName": "Tuesday",
-          "description": "Is the input date a Tuesday.",
-          "type": "BOOLEAN",
-          "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
-        },
-        {
-          "param": "wednesday",
-          "displayName": "Wednesday",
-          "description": "Is the input date a Wednesday.",
-          "type": "BOOLEAN",
-          "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
-        },
-        {
-          "param": "thursday",
-          "displayName": "Thursday",
-          "description": "Is the input date a Thursday.",
-          "type": "BOOLEAN",
-          "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
-        },
-        {
-          "param": "friday",
-          "displayName": "Friday",
-          "description": "Is the input date a Friday.",
-          "type": "BOOLEAN",
-          "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
-        },
-        {
-          "param": "saturday",
-          "displayName": "Saturday",
-          "description": "Is the input date a Saturday.",
-          "type": "BOOLEAN",
-          "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
-        },
-        {
-          "param": "sunday",
-          "displayName": "Sunday",
-          "description": "Is the input date a Sunday.",
-          "type": "BOOLEAN",
-          "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isDay\") || false",
-          "optional": true
+          "value": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ]
         },
         {
           "param": "reference_1",
@@ -2138,13 +2127,61 @@
         },
         {
           "param": "inclusive",
-          "displayName": "Inclusive Refernce Date(s)",
+          "displayName": "Inclusive Reference Date(s)",
           "description": "If reference dates are considered inclusive then condition will be successful if input date matches a reference date.",
           "type": "BOOLEAN",
           "hideExpression": "(model.condition && model.condition.value && model.condition.value !== \"isBefore\" && model.condition.value !== \"isAfter\" && model.condition.value !== \"isBetween\") || false",
           "optional": true
         }
       ]
+    },
+    {
+      "id": "duration",
+      "name": "Compare Date/Time",
+      "description": "Compare two parsed date objects resulting in the absolute difference between them. ",
+      "hasReturn": true,
+      "param": [
+        {
+          "param": "input",
+          "displayName": "First Date",
+          "description": "A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
+          "type": "STRING",
+          "optional": false
+        },
+        {
+          "param": "reference",
+          "displayName": "Second Date",
+          "description": "A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
+          "type": "STRING",
+          "optional": false
+        },
+        {
+          "param": "ignoreDays",
+          "displayName": "Days to Ignore",
+          "description": "Add days you wish to Ignore. E.g. To ignore days of a western weekend, add 'Saturday' and 'Sunday'.",
+          "type": "TAG",
+          "allowArray": true,
+          "optional": true,
+          "value": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ]
+        },
+        {
+          "param": "inclusive",
+          "displayName": "Include End Date",
+          "description": "If selected, the second input date is included in the calculation. E.g. Monday to Friday would be 5 days instead of 4.",
+          "type": "BOOLEAN",
+          "optional": true
+        }
+      ]
     }
-  ]
+  ],
+  "needsOAuth": false,
+  "category": "Utilities"
 }

@@ -8,17 +8,18 @@
  * Plugins SDK. https://developers.converse.ai/
  */
 
-const expect      = require('chai').expect;
-const test        = require('./lib/request-parse');
+const expect        = require('chai').expect;
+const testDate      = require('./lib/request-test').testDate;
+const testDuration  = require('./lib/request-test').testDuration;
 
-describe('Manipulate Date/Time', function () {
+describe('Manipulate Date/Time & Duration', function () {
 
   /* * * * * * * * * * * * * * * * * *
   * Without Input
   * * * * * * * * * * * * * * * * * */
 
   it('without input', function(done) {
-    test({}, function(err, res, done) {
+    testDate({}, function(err, res, done) {
       expect(res.body).to.have.property('status').to.equal(1);
       expect(res.body).to.have.property('error').to.have.property('httpStatus').to.equal(400);
       done();
@@ -26,14 +27,14 @@ describe('Manipulate Date/Time', function () {
   })
 
   /* * * * * * * * * * * * * * * * * *
-  * Manipulate && ISO_8601 && NO OFFSET
+  * Manipulate && Unix Timestamps && NO OFFSET
   * * * * * * * * * * * * * * * * * */
 
-  it('Add 2 years with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      years: 2,
+  it('Add 2 years with Unix Timestamp input (1562103000)', function(done) {
+    testDate({
+      input: '1499031000',
+      operation: 'Add',
+      years: '2',
     }, {
       years: 2019,
       months: 7,
@@ -49,31 +50,35 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 years with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+  /* * * * * * * * * * * * * * * * * *
+  * Add && ISO_8601 && NO OFFSET
+  * * * * * * * * * * * * * * * * * */
+
+  it('Add 2 years with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Subtract',
-      years: 10,
+      operation: 'Add',
+      years: '2',
     }, {
-      years: 2007,
+      years: 2019,
       months: 7,
       date: 2,
       hours: 21,
       minutes: 30,
       seconds: 0,
-      iso: '2007-07-02T21:30:00+00:00',
-      utc: '2007-07-02T21:30:00+00:00',
-      unix: 1183411800,
+      iso: '2019-07-02T21:30:00+00:00',
+      utc: '2019-07-02T21:30:00+00:00',
+      unix: 1562103000,
       offset: '+00:00',
       isValid: true
     }, done, 'manipulate');
   })
 
   it('Add 2 months with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      months: 2,
+      operation: 'Add',
+      months: '2',
     }, {
       years: 2017,
       months: 9,
@@ -89,31 +94,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 months with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Subtract',
-      months: 10,
-    }, {
-      years: 2016,
-      months: 9,
-      date: 2,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2016-09-02T21:30:00+00:00',
-      utc: '2016-09-02T21:30:00+00:00',
-      unix: 1472851800,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 days with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      days: 2,
+      operation: 'Add',
+      days: '2',
     }, {
       years: 2017,
       months: 7,
@@ -129,31 +114,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 days with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Subtract',
-      days: 10,
-    }, {
-      years: 2017,
-      months: 6,
-      date: 22,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2017-06-22T21:30:00+00:00',
-      utc: '2017-06-22T21:30:00+00:00',
-      unix: 1498167000,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 hours with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      hours: 2,
+      operation: 'Add',
+      hours: '2',
     }, {
       years: 2017,
       months: 7,
@@ -169,31 +134,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 hours with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Subtract',
-      hours: 10,
-    }, {
-      years: 2017,
-      months: 7,
-      date: 2,
-      hours: 11,
-      minutes: 30,
-      seconds: 0,
-      iso: '2017-07-02T11:30:00+00:00',
-      utc: '2017-07-02T11:30:00+00:00',
-      unix: 1498995000,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 minutes with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      minutes: 2,
+      operation: 'Add',
+      minutes: '2',
     }, {
       years: 2017,
       months: 7,
@@ -209,31 +154,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 minutes with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Subtract',
-      minutes: 10,
-    }, {
-      years: 2017,
-      months: 7,
-      date: 2,
-      hours: 21,
-      minutes: 20,
-      seconds: 0,
-      iso: '2017-07-02T21:20:00+00:00',
-      utc: '2017-07-02T21:20:00+00:00',
-      unix: 1499030400,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 seconds with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      seconds: 2,
+      operation: 'Add',
+      seconds: '2',
     }, {
       years: 2017,
       months: 7,
@@ -249,11 +174,115 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 seconds with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+  /* * * * * * * * * * * * * * * * * *
+  * Subtract && ISO_8601 && NO OFFSET
+  * * * * * * * * * * * * * * * * * */
+
+  it('Subtract 10 years with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Subtract',
-      seconds: 10,
+      operation: 'Subtract',
+      years: '10',
+    }, {
+      years: 2007,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2007-07-02T21:30:00+00:00',
+      utc: '2007-07-02T21:30:00+00:00',
+      unix: 1183411800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 months with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Subtract',
+      months: '10',
+    }, {
+      years: 2016,
+      months: 9,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2016-09-02T21:30:00+00:00',
+      utc: '2016-09-02T21:30:00+00:00',
+      unix: 1472851800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 days with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Subtract',
+      days: '10',
+    }, {
+      years: 2017,
+      months: 6,
+      date: 22,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-06-22T21:30:00+00:00',
+      utc: '2017-06-22T21:30:00+00:00',
+      unix: 1498167000,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 hours with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Subtract',
+      hours: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 11,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-02T11:30:00+00:00',
+      utc: '2017-07-02T11:30:00+00:00',
+      unix: 1498995000,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 minutes with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Subtract',
+      minutes: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 20,
+      seconds: 0,
+      iso: '2017-07-02T21:20:00+00:00',
+      utc: '2017-07-02T21:20:00+00:00',
+      unix: 1499030400,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 seconds with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Subtract',
+      seconds: '10',
     }, {
       years: 2017,
       months: 7,
@@ -269,15 +298,142 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
+
   /* * * * * * * * * * * * * * * * * *
-  * Manipulate && ISO_8601 && OFFSET
+  * Set && ISO_8601 && NO OFFSET
+  * * * * * * * * * * * * * * * * * */
+
+  it('Set years with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Set',
+      years: '2007',
+    }, {
+      years: 2007,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2007-07-02T21:30:00+00:00',
+      utc: '2007-07-02T21:30:00+00:00',
+      unix: 1183411800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set months with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Set',
+      months: '10',
+    }, {
+      years: 2017,
+      months: 10,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-10-02T21:30:00+00:00',
+      utc: '2017-10-02T21:30:00+00:00',
+      unix: 1506979800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set date with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Set',
+      days: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 10,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-10T21:30:00+00:00',
+      utc: '2017-07-10T21:30:00+00:00',
+      unix: 1499722200,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set hours with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Set',
+      hours: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 10,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-02T10:30:00+00:00',
+      utc: '2017-07-02T10:30:00+00:00',
+      unix: 1498991400,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set minutes with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Set',
+      minutes: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 10,
+      seconds: 0,
+      iso: '2017-07-02T21:10:00+00:00',
+      utc: '2017-07-02T21:10:00+00:00',
+      unix: 1499029800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+
+  it('Set seconds with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Set',
+      seconds: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 10,
+      iso: '2017-07-02T21:30:10+00:00',
+      utc: '2017-07-02T21:30:10+00:00',
+      unix: 1499031010,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+
+  /* * * * * * * * * * * * * * * * * *
+  * Add && ISO_8601 && OFFSET
   * * * * * * * * * * * * * * * * * */
 
   it('Add 2 years with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Add',
-      years: 2,
+      operation: 'Add',
+      years: '2',
     }, {
       years: 2019,
       months: 7,
@@ -293,31 +449,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 years with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Subtract',
-      years: 10,
-    }, {
-      years: 2007,
-      months: 7,
-      date: 2,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2007-07-02T21:30:00-07:00',
-      utc: '2007-07-03T04:30:00+00:00',
-      unix: 1183437000,
-      offset: '-07:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 months with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Add',
-      months: 2,
+      operation: 'Add',
+      months: '2',
     }, {
       years: 2017,
       months: 9,
@@ -333,31 +469,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 months with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Subtract',
-      months: 10,
-    }, {
-      years: 2016,
-      months: 9,
-      date: 2,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2016-09-02T21:30:00-07:00',
-      utc: '2016-09-03T04:30:00+00:00',
-      unix: 1472877000,
-      offset: '-07:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 days with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Add',
-      days: 2,
+      operation: 'Add',
+      days: '2',
     }, {
       years: 2017,
       months: 7,
@@ -373,31 +489,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 days with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Subtract',
-      days: 10,
-    }, {
-      years: 2017,
-      months: 6,
-      date: 22,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2017-06-22T21:30:00-07:00',
-      utc: '2017-06-23T04:30:00+00:00',
-      unix: 1498192200,
-      offset: '-07:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 hours with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Add',
-      hours: 2,
+      operation: 'Add',
+      hours: '2',
     }, {
       years: 2017,
       months: 7,
@@ -413,31 +509,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 hours with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Subtract',
-      hours: 10,
-    }, {
-      years: 2017,
-      months: 7,
-      date: 2,
-      hours: 11,
-      minutes: 30,
-      seconds: 0,
-      iso: '2017-07-02T11:30:00-07:00',
-      utc: '2017-07-02T18:30:00+00:00',
-      unix: 1499020200,
-      offset: '-07:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 minutes with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Add',
-      minutes: 2,
+      operation: 'Add',
+      minutes: '2',
     }, {
       years: 2017,
       months: 7,
@@ -453,31 +529,11 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 minutes with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
-      input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Subtract',
-      minutes: 10,
-    }, {
-      years: 2017,
-      months: 7,
-      date: 2,
-      hours: 21,
-      minutes: 20,
-      seconds: 0,
-      iso: '2017-07-02T21:20:00-07:00',
-      utc: '2017-07-03T04:20:00+00:00',
-      unix: 1499055600,
-      offset: '-07:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
   it('Add 2 seconds with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Add',
-      seconds: 2,
+      operation: 'Add',
+      seconds: '2',
     }, {
       years: 2017,
       months: 7,
@@ -493,11 +549,115 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 seconds with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
-    test({
+  /* * * * * * * * * * * * * * * * * *
+  * Subtract && ISO_8601 && OFFSET
+  * * * * * * * * * * * * * * * * * */
+
+  it('Subtract 10 years with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
       input: '2017-07-02T21:30:00-07:00',
-      add_or_sub: 'Subtract',
-      seconds: 10,
+      operation: 'Subtract',
+      years: '10',
+    }, {
+      years: 2007,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2007-07-02T21:30:00-07:00',
+      utc: '2007-07-03T04:30:00+00:00',
+      unix: 1183437000,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 months with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Subtract',
+      months: '10',
+    }, {
+      years: 2016,
+      months: 9,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2016-09-02T21:30:00-07:00',
+      utc: '2016-09-03T04:30:00+00:00',
+      unix: 1472877000,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 days with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Subtract',
+      days: '10',
+    }, {
+      years: 2017,
+      months: 6,
+      date: 22,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-06-22T21:30:00-07:00',
+      utc: '2017-06-23T04:30:00+00:00',
+      unix: 1498192200,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 hours with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Subtract',
+      hours: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 11,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-02T11:30:00-07:00',
+      utc: '2017-07-02T18:30:00+00:00',
+      unix: 1499020200,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 minutes with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Subtract',
+      minutes: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 20,
+      seconds: 0,
+      iso: '2017-07-02T21:20:00-07:00',
+      utc: '2017-07-03T04:20:00+00:00',
+      unix: 1499055600,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 seconds with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Subtract',
+      seconds: '10',
     }, {
       years: 2017,
       months: 7,
@@ -514,15 +674,139 @@ describe('Manipulate Date/Time', function () {
   })
 
 
+  /* * * * * * * * * * * * * * * * * *
+  * Set && ISO_8601 && NO OFFSET
+  * * * * * * * * * * * * * * * * * */
+
+  it('Set years with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Set',
+      years: '2007',
+    }, {
+      years: 2007,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2007-07-02T21:30:00-07:00',
+      utc: '2007-07-03T04:30:00+00:00',
+      unix: 1183437000,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set months with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Set',
+      months: '10',
+    }, {
+      years: 2017,
+      months: 10,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-10-02T21:30:00-07:00',
+      utc: '2017-10-03T04:30:00+00:00',
+      unix: 1507005000,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set date with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Set',
+      days: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 10,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-10T21:30:00-07:00',
+      utc: '2017-07-11T04:30:00+00:00',
+      unix: 1499747400,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set hours with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Set',
+      hours: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 10,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-02T10:30:00-07:00',
+      utc: '2017-07-02T17:30:00+00:00',
+      unix: 1499016600,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Set minutes with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Set',
+      minutes: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 10,
+      seconds: 0,
+      iso: '2017-07-02T21:10:00-07:00',
+      utc: '2017-07-03T04:10:00+00:00',
+      unix: 1499055000,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+
+  it('Set seconds with ISO_8601 input (2017-07-02T21:30:00-07:00) and offset (-07:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00-07:00',
+      operation: 'Set',
+      seconds: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 10,
+      iso: '2017-07-02T21:30:10-07:00',
+      utc: '2017-07-03T04:30:10+00:00',
+      unix: 1499056210,
+      offset: '-07:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
 
 
 
   /* * * * * * * * * * * * * * * * * *
-  * Manipulate && Parsed && NO OFFSET
+  * Add && Parsed && NO OFFSET
   * * * * * * * * * * * * * * * * * */
 
-  it('Add 2 years with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  it('Add 2 years with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -536,8 +820,8 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Add',
-      years: 2,
+      operation: 'Add',
+      years: '2',
     }, {
       years: 2019,
       months: 7,
@@ -553,8 +837,8 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 years with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  it('Add 2 months with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -568,40 +852,8 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Subtract',
-      years: 10,
-    }, {
-      years: 2007,
-      months: 7,
-      date: 2,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2007-07-02T21:30:00+00:00',
-      utc: '2007-07-02T21:30:00+00:00',
-      unix: 1183411800,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
-  it('Add 2 months with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
-      input: {
-        years: 2017,
-        months: 7,
-        date: 2,
-        hours: 21,
-        minutes: 30,
-        seconds: 0,
-        milliseconds: 0,
-        offset: '+00:00',
-        iso: '2017-07-02T21:30:00+00:00',
-        utc: '2017-07-02T21:30:00+00:00',
-        unix: 1499031000
-      },
-      add_or_sub: 'Add',
-      months: 2,
+      operation: 'Add',
+      months: '2',
     }, {
       years: 2017,
       months: 9,
@@ -617,8 +869,8 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 months with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  it('Add 2 days with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -632,40 +884,8 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Subtract',
-      months: 10,
-    }, {
-      years: 2016,
-      months: 9,
-      date: 2,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2016-09-02T21:30:00+00:00',
-      utc: '2016-09-02T21:30:00+00:00',
-      unix: 1472851800,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
-  it('Add 2 days with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
-      input: {
-        years: 2017,
-        months: 7,
-        date: 2,
-        hours: 21,
-        minutes: 30,
-        seconds: 0,
-        milliseconds: 0,
-        offset: '+00:00',
-        iso: '2017-07-02T21:30:00+00:00',
-        utc: '2017-07-02T21:30:00+00:00',
-        unix: 1499031000
-      },
-      add_or_sub: 'Add',
-      days: 2,
+      operation: 'Add',
+      days: '2',
     }, {
       years: 2017,
       months: 7,
@@ -681,8 +901,8 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 days with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  it('Add 2 hours with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -696,40 +916,8 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Subtract',
-      days: 10,
-    }, {
-      years: 2017,
-      months: 6,
-      date: 22,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      iso: '2017-06-22T21:30:00+00:00',
-      utc: '2017-06-22T21:30:00+00:00',
-      unix: 1498167000,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
-  it('Add 2 hours with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
-      input: {
-        years: 2017,
-        months: 7,
-        date: 2,
-        hours: 21,
-        minutes: 30,
-        seconds: 0,
-        milliseconds: 0,
-        offset: '+00:00',
-        iso: '2017-07-02T21:30:00+00:00',
-        utc: '2017-07-02T21:30:00+00:00',
-        unix: 1499031000
-      },
-      add_or_sub: 'Add',
-      hours: 2,
+      operation: 'Add',
+      hours: '2',
     }, {
       years: 2017,
       months: 7,
@@ -745,8 +933,8 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 hours with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  it('Add 2 minutes with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -760,40 +948,8 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Subtract',
-      hours: 10,
-    }, {
-      years: 2017,
-      months: 7,
-      date: 2,
-      hours: 11,
-      minutes: 30,
-      seconds: 0,
-      iso: '2017-07-02T11:30:00+00:00',
-      utc: '2017-07-02T11:30:00+00:00',
-      unix: 1498995000,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
-  it('Add 2 minutes with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
-      input: {
-        years: 2017,
-        months: 7,
-        date: 2,
-        hours: 21,
-        minutes: 30,
-        seconds: 0,
-        milliseconds: 0,
-        offset: '+00:00',
-        iso: '2017-07-02T21:30:00+00:00',
-        utc: '2017-07-02T21:30:00+00:00',
-        unix: 1499031000
-      },
-      add_or_sub: 'Add',
-      minutes: 2,
+      operation: 'Add',
+      minutes: '2',
     }, {
       years: 2017,
       months: 7,
@@ -809,8 +965,8 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 minutes with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  it('Add 2 seconds with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -824,40 +980,8 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Subtract',
-      minutes: 10,
-    }, {
-      years: 2017,
-      months: 7,
-      date: 2,
-      hours: 21,
-      minutes: 20,
-      seconds: 0,
-      iso: '2017-07-02T21:20:00+00:00',
-      utc: '2017-07-02T21:20:00+00:00',
-      unix: 1499030400,
-      offset: '+00:00',
-      isValid: true
-    }, done, 'manipulate');
-  })
-
-  it('Add 2 seconds with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
-      input: {
-        years: 2017,
-        months: 7,
-        date: 2,
-        hours: 21,
-        minutes: 30,
-        seconds: 0,
-        milliseconds: 0,
-        offset: '+00:00',
-        iso: '2017-07-02T21:30:00+00:00',
-        utc: '2017-07-02T21:30:00+00:00',
-        unix: 1499031000
-      },
-      add_or_sub: 'Add',
-      seconds: 2,
+      operation: 'Add',
+      seconds: '2',
     }, {
       years: 2017,
       months: 7,
@@ -873,8 +997,12 @@ describe('Manipulate Date/Time', function () {
     }, done, 'manipulate');
   })
 
-  it('Subtract 10 seconds with ISO_8601 input ({2017-07-02T21:30:00+00:00})', function(done) {
-    test({
+  /* * * * * * * * * * * * * * * * * *
+  * Subtract && Parsed && NO OFFSET
+  * * * * * * * * * * * * * * * * * */
+
+  it('Subtract 10 years with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
       input: {
         years: 2017,
         months: 7,
@@ -888,8 +1016,168 @@ describe('Manipulate Date/Time', function () {
         utc: '2017-07-02T21:30:00+00:00',
         unix: 1499031000
       },
-      add_or_sub: 'Subtract',
-      seconds: 10,
+      operation: 'Subtract',
+      years: '10',
+    }, {
+      years: 2007,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2007-07-02T21:30:00+00:00',
+      utc: '2007-07-02T21:30:00+00:00',
+      unix: 1183411800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 months with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
+      input: {
+        years: 2017,
+        months: 7,
+        date: 2,
+        hours: 21,
+        minutes: 30,
+        seconds: 0,
+        milliseconds: 0,
+        offset: '+00:00',
+        iso: '2017-07-02T21:30:00+00:00',
+        utc: '2017-07-02T21:30:00+00:00',
+        unix: 1499031000
+      },
+      operation: 'Subtract',
+      months: '10',
+    }, {
+      years: 2016,
+      months: 9,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2016-09-02T21:30:00+00:00',
+      utc: '2016-09-02T21:30:00+00:00',
+      unix: 1472851800,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 days with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
+      input: {
+        years: 2017,
+        months: 7,
+        date: 2,
+        hours: 21,
+        minutes: 30,
+        seconds: 0,
+        milliseconds: 0,
+        offset: '+00:00',
+        iso: '2017-07-02T21:30:00+00:00',
+        utc: '2017-07-02T21:30:00+00:00',
+        unix: 1499031000
+      },
+      operation: 'Subtract',
+      days: '10',
+    }, {
+      years: 2017,
+      months: 6,
+      date: 22,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-06-22T21:30:00+00:00',
+      utc: '2017-06-22T21:30:00+00:00',
+      unix: 1498167000,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 hours with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
+      input: {
+        years: 2017,
+        months: 7,
+        date: 2,
+        hours: 21,
+        minutes: 30,
+        seconds: 0,
+        milliseconds: 0,
+        offset: '+00:00',
+        iso: '2017-07-02T21:30:00+00:00',
+        utc: '2017-07-02T21:30:00+00:00',
+        unix: 1499031000
+      },
+      operation: 'Subtract',
+      hours: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 11,
+      minutes: 30,
+      seconds: 0,
+      iso: '2017-07-02T11:30:00+00:00',
+      utc: '2017-07-02T11:30:00+00:00',
+      unix: 1498995000,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 minutes with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
+      input: {
+        years: 2017,
+        months: 7,
+        date: 2,
+        hours: 21,
+        minutes: 30,
+        seconds: 0,
+        milliseconds: 0,
+        offset: '+00:00',
+        iso: '2017-07-02T21:30:00+00:00',
+        utc: '2017-07-02T21:30:00+00:00',
+        unix: 1499031000
+      },
+      operation: 'Subtract',
+      minutes: '10',
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 20,
+      seconds: 0,
+      iso: '2017-07-02T21:20:00+00:00',
+      utc: '2017-07-02T21:20:00+00:00',
+      unix: 1499030400,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
+  it('Subtract 10 seconds with Parsed input ({2017-07-02T21:30:00+00:00})', function(done) {
+    testDate({
+      input: {
+        years: 2017,
+        months: 7,
+        date: 2,
+        hours: 21,
+        minutes: 30,
+        seconds: 0,
+        milliseconds: 0,
+        offset: '+00:00',
+        iso: '2017-07-02T21:30:00+00:00',
+        utc: '2017-07-02T21:30:00+00:00',
+        unix: 1499031000
+      },
+      operation: 'Subtract',
+      seconds: '10',
     }, {
       years: 2017,
       months: 7,
@@ -911,10 +1199,10 @@ describe('Manipulate Date/Time', function () {
   * * * * * * * * * * * * * * * * * */
 
   it('Add 24 months with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      months: 24,
+      operation: 'Add',
+      months: '24',
     }, {
       years: 2019,
       months: 7,
@@ -931,11 +1219,11 @@ describe('Manipulate Date/Time', function () {
   })
 
   it('Add 24 months and 26 hours with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
-    test({
+    testDate({
       input: '2017-07-02T21:30:00+00:00',
-      add_or_sub: 'Add',
-      months: 24,
-      hours: 26,
+      operation: 'Add',
+      months: '24',
+      hours: '26',
     }, {
       years: 2019,
       months: 7,
@@ -948,6 +1236,52 @@ describe('Manipulate Date/Time', function () {
       unix: 1562196600,
       offset: '+00:00',
       isValid: true
+    }, done, 'manipulate');
+  })
+
+
+  it('Add Duration Object to Date (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Add',
+      iso: {
+        isDuration: true,
+        iso: 'PT19058H2M2S'
+      },
+    }, {
+      years: 2019,
+      months: 9,
+      date: 4,
+      hours: 23,
+      minutes: 32,
+      seconds: 2,
+      iso: '2019-09-04T23:32:02+00:00',
+      utc: '2019-09-04T23:32:02+00:00',
+      unix: 1567639922,
+      offset: '+00:00',
+      isValid: true,
+      isDate: true
+    }, done, 'manipulate');
+  })
+
+  it('Add ISO-8601 Duration to Date (2017-07-02T21:30:00+00:00)', function(done) {
+    testDate({
+      input: '2017-07-02T21:30:00+00:00',
+      operation: 'Add',
+      iso: 'PT19058H2M2S'
+    }, {
+      years: 2019,
+      months: 9,
+      date: 4,
+      hours: 23,
+      minutes: 32,
+      seconds: 2,
+      iso: '2019-09-04T23:32:02+00:00',
+      utc: '2019-09-04T23:32:02+00:00',
+      unix: 1567639922,
+      offset: '+00:00',
+      isValid: true,
+      isDate: true
     }, done, 'manipulate');
   })
 

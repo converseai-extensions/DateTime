@@ -153,6 +153,34 @@ describe('Format Date', function () {
   })
 
 
+  it('with Unix Timestamp input has offset && customized format', function(done) {
+    request(server)
+      .post('/')
+      .send({
+        event: 'MODULE_EXEC',
+        payload: {
+          moduleId: 'format',
+          moduleParam: {
+            input: '1499031000',
+            format: 'CUSTOM',
+            customized_format: 'Thursday 6th January, 2017 @ 9pm',
+            other_input: undefined
+          },
+          registrationData: {
+          }
+        }
+      })
+      .set('X_CONVERSE_APP_TOKEN', require('../app-token'))
+      .expect(200)
+      .end(function(err, res) {
+        debug(res.body.value);
+        expect(res.body).to.have.property('status').to.equal(0);
+        expect(res.body).to.have.property('value').to.have.property('formatted').to.equal('Sunday 2nd July, 2017 @ 9pm');
+        done();
+      });
+  })
+
+
   it('with parsed input && customized format', function(done) {
     request(server)
       .post('/')

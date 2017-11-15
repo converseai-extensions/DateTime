@@ -7,7 +7,7 @@
  * Plugins SDK. https://developers.converse.ai/
  */
 
-const test = require('../lib/request-parse');
+const test        = require('../lib/request-test').testDate;
 
 describe('Parse – Parsed Input', function () {
 

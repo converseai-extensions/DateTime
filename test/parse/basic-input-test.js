@@ -7,7 +7,7 @@
  * Plugins SDK. https://developers.converse.ai/
  */
 
-const test = require('../lib/request-parse');
+const test        = require('../lib/request-test').testDate;
 const chai        = require('chai');
 const expect      = chai.expect; chai.use(require('chai-match'));
 
@@ -261,6 +261,50 @@ describe('Parse – Basic Input', function () {
       iso: '2017-07-02T21:30:00+00:00',
       utc: '2017-07-02T21:30:00+00:00',
       unix: 1499031000,
+      isValid: true
+    }, done);
+  })
+
+  it('with RFC_2822 input (Sun, 2 Jul 2017 21:30:00 +0000)', function(done) {
+    test({
+      input: 'Sun, 2 Jul 2017 21:30:00 -0000',
+      offset: undefined,
+      custom_offset: undefined,
+      timezone_offset: undefined
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '+00:00',
+      iso: '2017-07-02T21:30:00+00:00',
+      utc: '2017-07-02T21:30:00+00:00',
+      unix: 1499031000,
+      isValid: true
+    }, done);
+  })
+
+  it('with zoned RFC_2822 input (Sun, 2 Jul 2017 21:30:00 -0700)', function(done) {
+    test({
+      input: 'Sun, 2 Jul 2017 21:30:00 -0700',
+      offset: undefined,
+      custom_offset: undefined,
+      timezone_offset: undefined
+    }, {
+      years: 2017,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: '2017-07-02T21:30:00-07:00',
+      utc: '2017-07-03T04:30:00+00:00',
+      unix: 1499056200,
       isValid: true
     }, done);
   })

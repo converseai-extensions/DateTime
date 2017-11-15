@@ -7,22 +7,26 @@
  * Plugins SDK. https://developers.converse.ai/
  */
 
-const moment  = require('moment');
-const chai    = require('chai');
-const expect  = chai.expect; chai.use(require('chai-match'));
-const test = require('../lib/request-parse');
+const moment      = require('moment');
+const zone        = require('moment-timezone').tz.zone;
+const expect      = require('chai').expect;
+const test        = require('../lib/request-test').testDate;
 
 describe('Parse – NLP Input', function () {
 
-  var now = function() {
-    var m = moment.utc();
+  var now = function(offset = '+00:00') {
+    var m = moment.utc(moment.utc().utc()).utcOffset(offset, false)
     return Object.assign(m.toObject(), {
       months: m.toObject().months + 1,
       iso: m.format('YYYY-MM-DDTHH:mm:ssZ'),
-      utc: m.format('YYYY-MM-DDTHH:mm:ssZ'),
-      unix: m.unix(),
+      utc: m.clone().utc().format('YYYY-MM-DDTHH:mm:ssZ'),
+      unix: m.clone().unix(),
       offset: m.format('Z')
     });
+  }
+
+  var tz = function(timezone) {
+    return zone(timezone).utcOffset(moment.utc()) * -1;
   }
 
   it('next Tuesday @ 9pm (UTC)', function(done) {
@@ -83,6 +87,7 @@ describe('Parse – NLP Input', function () {
   })
 
   it('next Tuesday @ 9pm & timezone offset (America/Los_Angeles)', function(done) {
+    var n = now(tz('America/Los_Angeles'));
     test({
       input: 'next Tuesday @ 9pm',
       offset: 'ZONE',
@@ -93,7 +98,7 @@ describe('Parse – NLP Input', function () {
       minutes: 0,
       seconds: 0,
       milliseconds: 0,
-      offset: '-07:00',
+      offset: n.offset,
       iso: ({iso}) => {
         expect(moment.parseZone(iso).format('dddd')).to.equal('Tuesday');
       },
@@ -120,7 +125,6 @@ describe('Parse – NLP Input', function () {
     }, done);
   })
 
-  // TODO: FIX RELATIVE NLP PARSING WITH OFFSETS
   it('a couple of mins ago', function(done) {
     var n = now();
     test({
@@ -158,16 +162,17 @@ describe('Parse – NLP Input', function () {
   })
 
   it('in 20 secs & timezone offset (America/Los_Angeles)', function(done) {
+    var n = now(tz('America/Los_Angeles'));
     test({
       input: 'in 20 secs',
       offset: 'ZONE',
       custom_offset: undefined,
       timezone_offset: 'America/Los_Angeles',
     }, {
-      offset: '-07:00',
+      offset: n.offset,
       iso: ({iso}) => {
         var value = moment.parseZone(iso).subtract(20, 'seconds');
-        var expected = moment.utc(now().utc).utcOffset('-07:00')
+        var expected = moment.utc(now().utc).utcOffset(n.offset)
         expect(value.format()).to.equal(expected.format());
       },
       isValid: true
@@ -175,16 +180,17 @@ describe('Parse – NLP Input', function () {
   })
 
   it('now & timezone offset (America/Los_Angeles)', function(done) {
+    var n = now(tz('America/Los_Angeles'));
     test({
       input: 'now',
       offset: 'ZONE',
       custom_offset: undefined,
       timezone_offset: 'America/Los_Angeles',
     }, {
-      offset: '-07:00',
+      offset: n.offset,
       iso: ({iso}) => {
         var value = moment.parseZone(iso);
-        var expected = moment.utc(now().utc).utcOffset('-07:00')
+        var expected = moment.utc(now().utc).utcOffset(n.offset)
         expect(value.format()).to.equal(expected.format());
       },
       isValid: true
@@ -192,16 +198,17 @@ describe('Parse – NLP Input', function () {
   })
 
   it('today & timezone offset (America/Los_Angeles)', function(done) {
+    var n = now(tz('America/Los_Angeles'));
     test({
       input: 'today',
       offset: 'ZONE',
       custom_offset: undefined,
       timezone_offset: 'America/Los_Angeles',
     }, {
-      offset: '-07:00',
+      offset: n.offset,
       iso: ({iso}) => {
         var value = moment.parseZone(iso);
-        var expected = moment.utc(now().utc).utcOffset('-07:00').startOf('day');
+        var expected = moment.utc(now().utc).utcOffset(n.offset).startOf('day');
         expect(value.format()).to.equal(expected.format());
       },
       isValid: true

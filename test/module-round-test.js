@@ -9,7 +9,7 @@
  */
 
 const expect      = require('chai').expect;
-const test        = require('./lib/request-parse');
+const test        = require('./lib/request-test').testDate;
 
 describe('Round Date/Time', function () {
 

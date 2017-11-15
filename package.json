@@ -10,12 +10,13 @@
     "zones": "node dev/zones.js"
   },
   "dependencies": {
-    "@converseai/plugins-sdk": "^1.0.3",
-    "geo-tz": "^3.3.3",
+    "@converseai/plugins-sdk": "^1.0.5",
+    "contained-periodic-values": "^1.0.0",
+    "geo-tz": "^3.3.4",
     "lodash": "^4.17.4",
-    "moment": "^2.18.1",
+    "moment": "^2.19.2",
     "moment-parseformat": "^2.2.0",
-    "moment-timezone": "^0.5.13",
+    "moment-timezone": "^0.5.14",
     "sugar-date": "^2.0.4"
   },
   "devDependencies": {
@@ -23,7 +24,7 @@
     "chai": "latest",
     "chai-match": "^1.1.1",
     "debug": "^2.6.8",
-    "express": "latest",
+    "express": "^4.16.2",
     "mocha": "latest",
     "supertest": "latest"
   }

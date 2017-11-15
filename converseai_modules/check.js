@@ -12,6 +12,7 @@
 
 const Status          = require('@converseai/plugins-sdk').Status;
 const ModuleResponse  = require('@converseai/plugins-sdk').Payloads.ModuleResponse;
+const Utils           = require('../lib/utils.js');
 
 module.exports = function check (app, body) {
  /**
@@ -40,12 +41,54 @@ module.exports = function check (app, body) {
   /** @type {Boolean} inclusive   */
   var inclusive = body.payload.moduleParam.inclusive;
 
-  var {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = body.payload.moduleParam;
+  var days = body.payload.moduleParam.days;
+
+  function compare(condition, date, ref, inclusive) {
+    if (condition !== undefined && date !== undefined && ref !== undefined) {
+      condition = (inclusive ? 'isSameOr' : 'is') + condition;
+      return date[condition](ref);
+    }
+  }
+
+  function contains(a, o) {
+    return a.map((e) => { return e.toLowerCase(); }).indexOf(o.toLowerCase()) > -1
+  }
 
   if (input !== undefined && condition !== undefined) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 
+    var date = Utils.local(input);
+    var passed = false;
+    switch (condition) {
+      case 'isLeapYear':
+        passed = date[condition]();
+        break;
+      case 'isDay':
+        if (days) {
+          if (contains(days, 'monday'))     { passed = passed || date.isoWeekday() === 1}
+          if (contains(days, 'tuesday'))    { passed = passed || date.isoWeekday() === 2}
+          if (contains(days, 'wednesday'))  { passed = passed || date.isoWeekday() === 3}
+          if (contains(days, 'thursday'))   { passed = passed || date.isoWeekday() === 4}
+          if (contains(days, 'friday'))     { passed = passed || date.isoWeekday() === 5}
+          if (contains(days, 'saturday'))   { passed = passed || date.isoWeekday() === 6}
+          if (contains(days, 'sunday'))     { passed = passed || date.isoWeekday() === 7}
+        }
+        break;
+      case 'isBefore':
+        passed = compare('Before', date, Utils.local(reference1), inclusive);
+        break;
+      case 'isAfter':
+        passed = compare('After', date, Utils.local(reference1), inclusive);
+        break;
+      case 'isBetween':
+        passed = compare('Before', date, Utils.local(reference1), inclusive) && compare('After', date, Utils.local(reference1), inclusive);
+        break;
+      default:
+
+    }
+
+    response.setExit((passed === true) ? 'Success' : 'Failed');
     /*
     * This will return a success status and response to the conversation.
     * It is important to always call this method when the module has finished

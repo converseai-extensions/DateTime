@@ -9,7 +9,9 @@
 
 const expect      = require('chai').expect;
 const moment      = require('moment');
-const test        = require('./lib/request-parse');
+const zone        = require('moment-timezone').tz.zone;
+const test        = require('./lib/request-test').testDate;
+
 
 describe('Now', function () {
 
@@ -22,6 +24,10 @@ describe('Now', function () {
       unix: m.clone().unix(),
       offset: m.format('Z')
     });
+  }
+
+  var tz = function(timezone) {
+    return zone(timezone).utcOffset(moment.utc()) * -1;
   }
 
   /* * * * * * * * * * * * * * * * * *
@@ -96,8 +102,8 @@ describe('Now', function () {
   * Timezone Offset
   * * * * * * * * * * * * * * * * * */
 
-  it('with timezone offset (-07:00)', function(done) {
-    var n = now('-07:00');
+  it('with timezone offset (America/Los_Angeles)', function(done) {
+    var n = now(tz('America/Los_Angeles'));
     test({
       offset: 'ZONE',
       timezone_offset: 'America/Los_Angeles'
@@ -111,7 +117,7 @@ describe('Now', function () {
       iso: n.iso,
       utc: n.utc,
       unix: n.unix,
-      offset: '-07:00',
+      offset: n.offset,
       isValid: true
     }, done, 'now');
   })
@@ -121,7 +127,7 @@ describe('Now', function () {
   * * * * * * * * * * * * * * * * * */
 
   it('with location offset (47.650499, -122.350070)', function(done) {
-    var n = now('-07:00');
+    var n = now(tz('America/Los_Angeles'));
     test({
       offset: 'LOCATION',
       location_offset: '47.650499, -122.350070'
@@ -135,7 +141,7 @@ describe('Now', function () {
       iso: n.iso,
       utc: n.utc,
       unix: n.unix,
-      offset: '-07:00',
+      offset: n.offset,
       isValid: true
     }, done, 'now');
   })

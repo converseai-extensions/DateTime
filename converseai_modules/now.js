@@ -57,7 +57,7 @@ module.exports = function now (app, body) {
        timezoneOffset = geo.tz(locationOffset[0].trim(), locationOffset[1].trim());
      }
      case 'ZONE':
-     o = tz.zone(timezoneOffset).offset(Utils.utc(now, 0)) * -1;
+     o = tz.zone(timezoneOffset).utcOffset(Utils.utc(now, 0)) * -1;
      break;
      case 'NONE':
      default:
