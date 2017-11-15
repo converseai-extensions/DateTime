@@ -14,7 +14,7 @@
     "contained-periodic-values": "^1.0.0",
     "geo-tz": "^3.3.4",
     "lodash": "^4.17.4",
-    "moment": "^2.19.2",
+    "moment": "~2.18.0",
     "moment-parseformat": "^2.2.0",
     "moment-timezone": "^0.5.14",
     "sugar-date": "^2.0.4"
