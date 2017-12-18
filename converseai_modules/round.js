@@ -1,6 +1,6 @@
 /**
  * @file round.js
- * @author graeme+admin@converse.ai
+ * @author graeme@converse.ai
  * @description Return start or end of unit in time of a Date/Time
  * object.
  *

@@ -1,6 +1,6 @@
 /**
  * @file test/module-check-test.js
- * @author graeme+admin@converse.ai
+ * @author graeme@converse.ai
  * @description Check an input date against specified conditions
  * and route your template accordingly.
  *

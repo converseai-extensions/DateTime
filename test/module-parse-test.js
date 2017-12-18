@@ -1,6 +1,6 @@
 /**
  * @file test/module-parse-test.js
- * @author graeme+admin@converse.ai
+ * @author graeme@converse.ai
  * @description This module will parse an input into a structured
  * Date that can be manipulated or formatted. Along with human
  * readable dates, this module can parse 'ISO-8601' standard strings,

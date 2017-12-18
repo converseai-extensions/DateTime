@@ -91,6 +91,29 @@ describe('Parse – Basic Input', function () {
     }, done);
   })
 
+  it('with human input (02/07/2017) with locale (auto)', function(done) {
+    test({
+      input: '02/07/2017',
+      locale: '',
+      offset: undefined,
+      custom_offset: undefined,
+      timezone_offset: undefined
+    }, {
+      years: 2017,
+      months: 2,
+      date: 7,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '+00:00',
+      iso: '2017-02-07T00:00:00+00:00',
+      utc: '2017-02-07T00:00:00+00:00',
+      unix: 1486425600,
+      isValid: true
+    }, done);
+  })
+
   it('with human input (13/07/2017)', function(done) {
     test({
       input: '13/07/2017',

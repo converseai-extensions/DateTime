@@ -1,6 +1,6 @@
 /**
  * @file test/module-duration-test.js
- * @author graeme+admin@converse.ai
+ * @author graeme@converse.ai
  * @description Compare two parsed date objects resulting in the
  * duration between.
  *

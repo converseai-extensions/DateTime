@@ -1,6 +1,6 @@
 /**
  * @file test/module-manipulate-test.js
- * @author graeme+admin@converse.ai
+ * @author graeme@converse.ai
  * @description Add or subtract a unit of time from a parsed date
  * object.
  *

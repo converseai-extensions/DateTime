@@ -1,15 +1,16 @@
 {
   "name": "date_time",
   "displayName": "Date/Time",
-  "description": "Parse, validate, manipulate, and display dates and times via Moment.JS and Sugar.JS",
+  "description": "Parse, validate, manipulate, and format dates and times.",
   "documentLink": "",
   "providerData": [],
   "module": [
     {
       "id": "parse",
       "name": "Parse Date/Time",
-      "description": "This module will parse an input into a structured Date that can be manipulated or formatted. Along with human readable dates, this module can parse 'ISO-8601' standard strings, 'RFC 2822' standard strings, Unix timestamps, and many more.",
+      "description": "This module will parse an input into a structured Date/Time that can be manipulated or formatted. Along with human readable dates, this module can parse 'ISO-8601' standard strings, 'RFC 2822' standard strings, Unix timestamps, and many more formats.",
       "hasReturn": true,
+      "documentLink": "https://get.converse.ai/v2/docs/parse-datetime-module",
       "param": [
         {
           "param": "input",
@@ -501,16 +502,16 @@
               "value": "NONE"
             },
             {
-              "label": "Custom Offset",
-              "value": "CUSTOM"
-            },
-            {
               "label": "Timezone Offset",
               "value": "ZONE"
             },
             {
               "label": "Lat/Long Offset",
               "value": "LOCATION"
+            },
+            {
+              "label": "Custom Offset",
+              "value": "CUSTOM"
             },
             "---",
             "-12:00",
@@ -1152,7 +1153,7 @@
         {
           "param": "location_offset",
           "displayName": "Lat/Long Offset",
-          "description": "Specify a location from a latitude and longitude string separted by a comma (,). Daylight savings will be included in offset calculation. E.g. 47.650499,-122.350070 would be America/Los_Angeles.",
+          "description": "Specify a location from a latitude and longitude string separated by a comma (,). Daylight savings will be included in offset calculation. E.g. 47.650499,-122.350070 would be America/Los_Angeles.",
           "type": "STRING",
           "hideExpression": "(model.offset && model.offset.value && model.offset.value !== \"LOCATION\") || false"
         }
@@ -1163,6 +1164,7 @@
       "name": "Current Date/Time",
       "description": "This module will return the current date/time into a structured Date object that can be manipulated or formatted.",
       "hasReturn": true,
+      "documentLink": "https://get.converse.ai/v2/docs/current-datetime-module",
       "param": [
         {
           "param": "offset",
@@ -1834,20 +1836,21 @@
     },
     {
       "id": "format",
-      "name": "Format Date",
+      "name": "Format Date/Time",
       "description": "This module will format the output of the Parse Date/Time module to a given human readable form.",
       "hasReturn": true,
+      "documentLink": "https://get.converse.ai/v2/docs/format-datetime-module",
       "param": [
         {
           "param": "input",
           "displayName": "Date",
-          "description": "A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
+          "description": "A required input to be formatted into a string. The input can be an 'ISO-8601' formatted string, Unix Timestamp, or the structured Date/Time object output of another Date/Time module.",
           "type": "STRING"
         },
         {
           "param": "format",
           "displayName": "Format",
-          "description": "The format you wish to retrieve from the module. Some formats have advanced options below.",
+          "description": "The format of the returned output. Choose from one of the common options, use Date/Time tokens to create a custom format, or specify another Date/Time object for a relative format.",
           "type": "ENUM",
           "value": [
             {
@@ -1894,11 +1897,12 @@
       "name": "Round Date/Time",
       "description": "Return start or end of unit in time of a Date/Time object.",
       "hasReturn": true,
+      "documentLink": "https://get.converse.ai/v2/docs/round-datetime-module",
       "param": [
         {
           "param": "start_or_end",
           "displayName": "Start/End",
-          "description": "Round to the start or end of the time unit specified.",
+          "description": "Round the input to the start or end of the time unit specified.",
           "type": "ENUM",
           "optional": false,
           "value": [
@@ -1909,7 +1913,7 @@
         {
           "param": "input",
           "displayName": "Date",
-          "description": "Date to be rounded to start or end of specified time unit. A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time module.",
+          "description": "A required input to be rounded up or down by the specified unit. The input can be an 'ISO-8601' formatted string, Unix Timestamp, or the structured Date/Time object output of another Date/Time module.",
           "type": "STRING",
           "optional": false
         },
@@ -1921,8 +1925,8 @@
           "optional": false,
           "value": [
             "Year",
-            "Month",
             "Quarter",
+            "Month",
             "Week",
             "Day",
             "Hour",
@@ -1973,6 +1977,7 @@
       "name": "Manipulate Date/Time",
       "description": "Add or subtract a unit of time from a parsed date object.",
       "hasReturn": true,
+      "documentLink": "https://get.converse.ai/v2/docs/manipulate-datetime-module",
       "param": [
         {
           "param": "operation",
@@ -1989,7 +1994,7 @@
         {
           "param": "input",
           "displayName": "Date",
-          "description": "Date to be manipulated. A date represented in 'ISO-8601' format, Unix Timestamp, or the output of Parse Date/Time.",
+          "description": "A required input to be manipulated. The input can be an 'ISO-8601' formatted string, Unix Timestamp, or the structured Date/Time object output of another Date/Time module.",
           "type": "STRING",
           "optional": false
         },
@@ -2050,6 +2055,7 @@
       "name": "Check Date/Time",
       "description": "Check an input date against specified conditions and route your template accordingly.",
       "hasReturn": false,
+      "documentLink": "https://get.converse.ai/v2/docs/check-datetime-module",
       "exits": [
         "Success",
         "Failed"
@@ -2138,8 +2144,9 @@
     {
       "id": "duration",
       "name": "Compare Date/Time",
-      "description": "Compare two parsed date objects resulting in the absolute difference between them. ",
+      "description": "Compare two parsed date objects resulting in the absolute difference between them.",
       "hasReturn": true,
+      "documentLink": "https://get.converse.ai/v2/docs/compare-datetime-module",
       "param": [
         {
           "param": "input",
