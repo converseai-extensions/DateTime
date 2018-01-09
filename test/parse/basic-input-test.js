@@ -9,11 +9,12 @@
 
 const test        = require('../lib/request-test').testDate;
 const chai        = require('chai');
+const moment      = require('moment');
 const expect      = chai.expect; chai.use(require('chai-match'));
 
 describe('Parse – Basic Input', function () {
 
-
+  var year = moment.utc().year();
 
   /* * * * * * * * * * * * * * * * * *
   * Without Input
@@ -53,7 +54,7 @@ describe('Parse – Basic Input', function () {
       custom_offset: undefined,
       timezone_offset: undefined
     }, {
-      years: 2017,
+      years: year,
       months: 7,
       date: 2,
       hours: 21,
@@ -61,9 +62,8 @@ describe('Parse – Basic Input', function () {
       seconds: 0,
       milliseconds: 0,
       offset: '+00:00',
-      iso: '2017-07-02T21:30:00+00:00',
-      utc: '2017-07-02T21:30:00+00:00',
-      unix: 1499031000,
+      iso: year + '-07-02T21:30:00+00:00',
+      utc: year + '-07-02T21:30:00+00:00',
       isValid: true
     }, done);
   })
@@ -343,7 +343,7 @@ describe('Parse – Basic Input', function () {
       custom_offset: undefined,
       timezone_offset: undefined
     }, {
-      years: 2017,
+      years: year,
       months: 7,
       date: 2,
       hours: 21,
@@ -351,9 +351,8 @@ describe('Parse – Basic Input', function () {
       seconds: 0,
       milliseconds: 0,
       offset: '-07:00',
-      iso: '2017-07-02T21:30:00-07:00',
-      utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200,
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
       isValid: true
     }, done);
   })
@@ -365,7 +364,7 @@ describe('Parse – Basic Input', function () {
       custom_offset: '-07:00',
       timezone_offset: undefined
     }, {
-      years: 2017,
+      years: year,
       months: 7,
       date: 2,
       hours: 21,
@@ -373,9 +372,8 @@ describe('Parse – Basic Input', function () {
       seconds: 0,
       milliseconds: 0,
       offset: '-07:00',
-      iso: '2017-07-02T21:30:00-07:00',
-      utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200,
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
       isValid: true
     }, done);
   })
@@ -387,7 +385,7 @@ describe('Parse – Basic Input', function () {
       custom_offset: undefined,
       timezone_offset: 'America/Los_Angeles'
     }, {
-      years: 2017,
+      years: year,
       months: 7,
       date: 2,
       hours: 21,
@@ -395,9 +393,8 @@ describe('Parse – Basic Input', function () {
       seconds: 0,
       milliseconds: 0,
       offset: '-07:00',
-      iso: '2017-07-02T21:30:00-07:00',
-      utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200,
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
       isValid: true
     }, done);
   })
@@ -430,7 +427,7 @@ describe('Parse – Basic Input', function () {
       offset: 'LOCATION',
       location_offset: '47.650499, -122.350070'
     }, {
-      years: 2017,
+      years: year,
       months: 7,
       date: 2,
       hours: 21,
@@ -438,9 +435,8 @@ describe('Parse – Basic Input', function () {
       seconds: 0,
       milliseconds: 0,
       offset: '-07:00',
-      iso: '2017-07-02T21:30:00-07:00',
-      utc: '2017-07-03T04:30:00+00:00',
-      unix: 1499056200,
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
       isValid: true
     }, done);
   })
