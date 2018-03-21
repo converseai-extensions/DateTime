@@ -357,28 +357,7 @@ describe('Parse – Basic Input', function () {
     }, done);
   })
 
-  it('with human input (Sunday 2nd July, 9:30pm) && custom offset (-07:00)', function(done) {
-    test({
-      input: 'Sunday 2nd July, 9:30pm',
-      offset: 'CUSTOM',
-      custom_offset: '-07:00',
-      timezone_offset: undefined
-    }, {
-      years: year,
-      months: 7,
-      date: 2,
-      hours: 21,
-      minutes: 30,
-      seconds: 0,
-      milliseconds: 0,
-      offset: '-07:00',
-      iso: year + '-07-02T21:30:00-07:00',
-      utc: year + '-07-03T04:30:00+00:00',
-      isValid: true
-    }, done);
-  })
-
-  it('with human input (Sunday 2nd July, 9:30pm) && timezone offset (-07:00)', function(done) {
+  it('with human input (Sunday 2nd July, 9:30pm) && timezone offset (America/Los_Angeles)', function(done) {
     test({
       input: 'Sunday 2nd July, 9:30pm',
       offset: 'ZONE',
@@ -399,7 +378,7 @@ describe('Parse – Basic Input', function () {
     }, done);
   })
 
-  it('with ISO_8601 input (2017-07-02T21:30:00+00:00) && timezone offset (-07:00)', function(done) {
+  it('with ISO_8601 input (2017-07-02T21:30:00+00:00) && timezone offset (America/Los_Angeles)', function(done) {
     test({
       input: '2017-07-02T21:30:00+00:00',
       offset: 'ZONE',
@@ -461,4 +440,90 @@ describe('Parse – Basic Input', function () {
       isValid: true
     }, done);
   })
+
+
+  it('with human input (Sunday 2nd July, 9:30pm) && custom offset (-07:00)', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'CUSTOM',
+      custom_offset: '-07:00',
+      timezone_offset: undefined
+    }, {
+      years: year,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
+      isValid: true
+    }, done);
+  })
+
+  it('with human input (Sunday 2nd July, 9:30pm) && custom offset (America/Los_Angeles)', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'CUSTOM',
+      custom_offset: 'America/Los_Angeles',
+      timezone_offset: undefined
+    }, {
+      years: year,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
+      isValid: true
+    }, done);
+  })
+
+  it('with human input (Sunday 2nd July, 9:30pm) && custom offset (America/Los_Angeles)', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'CUSTOM',
+      custom_offset: 'America/Los_Angeles',
+      timezone_offset: undefined
+    }, {
+      years: year,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
+      isValid: true
+    }, done);
+  })
+
+  it('with human input (Sunday 2nd July, 9:30pm) && custom offset (47.650499, -122.350070)', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'CUSTOM',
+      custom_offset: '47.650499, -122.350070',
+      timezone_offset: undefined
+    }, {
+      years: year,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: year + '-07-02T21:30:00-07:00',
+      utc: year + '-07-03T04:30:00+00:00',
+      isValid: true
+    }, done);
+  })
+
 });

@@ -86,6 +86,25 @@ describe('Parse – NLP Input', function () {
     }, done);
   })
 
+  it('next Tuesday @ 9pm & custom offset (America/Los_Angeles)', function(done) {
+    test({
+      input: 'next Tuesday @ 9pm',
+      offset: 'CUSTOM',
+      custom_offset: 'America/Los_Angeles',
+      timezone_offset: undefined,
+    }, {
+      hours: 21,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '-07:00',
+      iso: ({iso}) => {
+        expect(moment.parseZone(iso).format('dddd')).to.equal('Tuesday');
+      },
+      isValid: true
+    }, done);
+  })
+
   it('next Tuesday @ 9pm & timezone offset (America/Los_Angeles)', function(done) {
     var n = now(tz('America/Los_Angeles'));
     test({
@@ -149,6 +168,24 @@ describe('Parse – NLP Input', function () {
       input: 'a couple of mins ago',
       offset: 'CUSTOM',
       custom_offset: '-07:00',
+      timezone_offset: undefined,
+    }, {
+      offset: '-07:00',
+      iso: ({iso}) => {
+        var value = moment.parseZone(iso).add(2, 'minutes');
+        var expected = moment.utc(now().utc).utcOffset('-07:00');
+        expect(value.format()).to.equal(expected.format());
+      },
+      isValid: true
+    }, done);
+  })
+
+  it('a couple of mins ago & custom offset (America/Los_Angeles)', function(done) {
+    var n = now();
+    test({
+      input: 'a couple of mins ago',
+      offset: 'CUSTOM',
+      custom_offset: 'America/Los_Angeles',
       timezone_offset: undefined,
     }, {
       offset: '-07:00',

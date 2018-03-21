@@ -75,30 +75,6 @@ describe('Now', function () {
   })
 
   /* * * * * * * * * * * * * * * * * *
-  * Static Offset
-  * * * * * * * * * * * * * * * * * */
-
-  it('with custom offset (-07:00)', function(done) {
-    var n = now('-07:00');
-    test({
-      offset: 'CUSTOM',
-      custom_offset: '-07:00',
-    }, {
-      years: n.years,
-      months: n.months,
-      date: n.date,
-      hours: n.hours,
-      minutes: n.minutes,
-      seconds: n.seconds,
-      iso: n.iso,
-      utc: n.utc,
-      unix: n.unix,
-      offset: '-07:00',
-      isValid: true
-    }, done, 'now');
-  })
-
-  /* * * * * * * * * * * * * * * * * *
   * Timezone Offset
   * * * * * * * * * * * * * * * * * */
 
@@ -145,5 +121,69 @@ describe('Now', function () {
       isValid: true
     }, done, 'now');
   })
+
+  /* * * * * * * * * * * * * * * * * *
+  * Custom Offset
+  * * * * * * * * * * * * * * * * * */
+
+ it('with custom offset (-07:00)', function(done) {
+  var n = now('-07:00');
+  test({
+    offset: 'CUSTOM',
+    custom_offset: '-07:00',
+  }, {
+    years: n.years,
+    months: n.months,
+    date: n.date,
+    hours: n.hours,
+    minutes: n.minutes,
+    seconds: n.seconds,
+    iso: n.iso,
+    utc: n.utc,
+    unix: n.unix,
+    offset: '-07:00',
+    isValid: true
+  }, done, 'now');
+})
+
+it('with custom offset (America/Los_Angeles)', function(done) {
+  var n = now(tz('America/Los_Angeles'));
+  test({
+    offset: 'CUSTOM',
+    custom_offset: 'America/Los_Angeles',
+  }, {
+    years: n.years,
+    months: n.months,
+    date: n.date,
+    hours: n.hours,
+    minutes: n.minutes,
+    seconds: n.seconds,
+    iso: n.iso,
+    utc: n.utc,
+    unix: n.unix,
+    offset: '-07:00',
+    isValid: true
+  }, done, 'now');
+})
+
+it('with custom offset (47.650499, -122.350070)', function(done) {
+  var n = now(tz('America/Los_Angeles'));
+  test({
+    offset: 'CUSTOM',
+    custom_offset: '47.650499, -122.350070'
+  }, {
+    years: n.years,
+    months: n.months,
+    date: n.date,
+    hours: n.hours,
+    minutes: n.minutes,
+    seconds: n.seconds,
+    iso: n.iso,
+    utc: n.utc,
+    unix: n.unix,
+    offset: n.offset,
+    isValid: true
+  }, done, 'now');
+})
 
 });

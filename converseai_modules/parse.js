@@ -12,8 +12,6 @@
 const Status          = require('@converseai/plugins-sdk').Status;
 const ModuleResponse  = require('@converseai/plugins-sdk').Payloads.ModuleResponse;
 const Utils           = require('../lib/utils.js');
-const tz              = require('moment-timezone').tz;
-const geo             = require('geo-tz');
 
 
 module.exports = function parse (app, body) {
@@ -55,30 +53,8 @@ module.exports = function parse (app, body) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 
-    var isValidArguments = true;
-    var o = offset;
-    switch (offset) {
-      case 'CUSTOM':
-      o = customOffset;
-      break;
-      case 'LOCATION':
-      locationOffset = locationOffset && locationOffset.split(',');
-      if (locationOffset && locationOffset.length === 2) {
-        timezoneOffset = geo.tz(locationOffset[0].trim(), locationOffset[1].trim());
-      }
-      case 'ZONE':
-      if (timezoneOffset) {
-        o = tz.zone(timezoneOffset).utcOffset(Utils.utc(input, 0)) * -1;
-      } else {
-        isValidArguments = false;
-      }
-      break;
-      case 'NONE':
-      default:
-
-    }
-
-    var date = Utils.utc(input, o, locale);
+    var utcOffset = Utils.normaliseOffset(input, offset, customOffset, timezoneOffset, locationOffset) || offset;
+    var date = Utils.utc(input, utcOffset, locale);
 
     /*
     * Set an object on the response. This object will be returned to and stored

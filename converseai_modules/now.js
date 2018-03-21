@@ -12,8 +12,6 @@
 const Status          = require('@converseai/plugins-sdk').Status;
 const ModuleResponse  = require('@converseai/plugins-sdk').Payloads.ModuleResponse;
 const Utils           = require('../lib/utils.js');
-const tz              = require('moment-timezone').tz;
-const geo             = require('geo-tz');
 
 module.exports = function now (app, body) {
   /**
@@ -46,24 +44,8 @@ module.exports = function now (app, body) {
    var response = new ModuleResponse();
 
    var now = Utils.now();
-   var o = offset;
-   switch (offset) {
-     case 'CUSTOM':
-     o = customOffset;
-     break;
-     case 'LOCATION':
-     locationOffset = locationOffset && locationOffset.split(',');
-     if (locationOffset && locationOffset.length === 2) {
-       timezoneOffset = geo.tz(locationOffset[0].trim(), locationOffset[1].trim());
-     }
-     case 'ZONE':
-     o = tz.zone(timezoneOffset).utcOffset(Utils.utc(now, 0)) * -1;
-     break;
-     case 'NONE':
-     default:
-   }
-
-   now.utcOffset(o, false);
+   var utcOffset = Utils.normaliseOffset(now, offset, customOffset, timezoneOffset, locationOffset) || offset;
+   now.utcOffset(utcOffset, false);
    var date = Utils.utc(now.format(Utils.ISO_8601));
 
    /*
