@@ -52,6 +52,28 @@ describe('Now', function () {
   })
 
   /* * * * * * * * * * * * * * * * * *
+  * No Offset
+  * * * * * * * * * * * * * * * * * */
+
+  it('with no offset', function(done) {
+    var n = now();
+    test({
+    }, {
+      years: n.years,
+      months: n.months,
+      date: n.date,
+      hours: n.hours,
+      minutes: n.minutes,
+      seconds: n.seconds,
+      iso: n.iso,
+      utc: n.utc,
+      unix: n.unix,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'now');
+  })
+
+  /* * * * * * * * * * * * * * * * * *
   * Static Offset
   * * * * * * * * * * * * * * * * * */
 
@@ -125,6 +147,27 @@ describe('Now', function () {
   /* * * * * * * * * * * * * * * * * *
   * Custom Offset
   * * * * * * * * * * * * * * * * * */
+
+
+ it('with custom broken offset', function(done) {
+  var n = now();
+  test({
+    offset: 'CUSTOM',
+    custom_offset: 'abc'
+  }, {
+    years: n.years,
+    months: n.months,
+    date: n.date,
+    hours: n.hours,
+    minutes: n.minutes,
+    seconds: n.seconds,
+    iso: n.iso,
+    utc: n.utc,
+    unix: n.unix,
+    offset: '+00:00',
+    isValid: true
+  }, done, 'now');
+})
 
  it('with custom offset (-07:00)', function(done) {
   var n = now('-07:00');

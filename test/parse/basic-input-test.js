@@ -442,6 +442,48 @@ describe('Parse – Basic Input', function () {
   })
 
 
+  it('with human input (Sunday 2nd July, 9:30pm) && no custom offset', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'CUSTOM',
+      custom_offset: '',
+      timezone_offset: undefined
+    }, {
+      years: year,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '+00:00',
+      iso: year + '-07-02T21:30:00+00:00',
+      utc: year + '-07-02T21:30:00+00:00',
+      isValid: true
+    }, done);
+  })
+
+  it('with human input (Sunday 2nd July, 9:30pm) && broken custom offset', function(done) {
+    test({
+      input: 'Sunday 2nd July, 9:30pm',
+      offset: 'CUSTOM',
+      custom_offset: 'abc',
+      timezone_offset: undefined
+    }, {
+      years: year,
+      months: 7,
+      date: 2,
+      hours: 21,
+      minutes: 30,
+      seconds: 0,
+      milliseconds: 0,
+      offset: '+00:00',
+      iso: year + '-07-02T21:30:00+00:00',
+      utc: year + '-07-02T21:30:00+00:00',
+      isValid: true
+    }, done);
+  })
+
   it('with human input (Sunday 2nd July, 9:30pm) && custom offset (-07:00)', function(done) {
     test({
       input: 'Sunday 2nd July, 9:30pm',

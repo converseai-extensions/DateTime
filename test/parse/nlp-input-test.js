@@ -162,6 +162,42 @@ describe('Parse – NLP Input', function () {
     }, done);
   })
 
+  it('a couple of mins ago & no custom offset', function(done) {
+    var n = now();
+    test({
+      input: 'a couple of mins ago',
+      offset: 'CUSTOM',
+      custom_offset: '',
+      timezone_offset: undefined,
+    }, {
+      offset: '+00:00',
+      iso: ({iso}) => {
+        var value = moment.parseZone(iso).add(2, 'minutes');
+        var expected = moment.utc(now().utc);
+        expect(value.format()).to.equal(expected.format());
+      },
+      isValid: true
+    }, done);
+  })
+
+  it('a couple of mins ago & broken custom offset', function(done) {
+    var n = now();
+    test({
+      input: 'a couple of mins ago',
+      offset: 'CUSTOM',
+      custom_offset: 'abc',
+      timezone_offset: undefined,
+    }, {
+      offset: '+00:00',
+      iso: ({iso}) => {
+        var value = moment.parseZone(iso).add(2, 'minutes');
+        var expected = moment.utc(now().utc);
+        expect(value.format()).to.equal(expected.format());
+      },
+      isValid: true
+    }, done);
+  })
+
   it('a couple of mins ago & custom offset (-07:00)', function(done) {
     var n = now();
     test({
