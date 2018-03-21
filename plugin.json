@@ -544,7 +544,7 @@
         {
           "param": "custom_offset",
           "displayName": "Custom Offset",
-          "description": "Define a custom offset in the format of ±HH:mm. E.g. Plus eight and a half hours: +08:30",
+          "description": "Define a custom offset in the format of '±HH:mm', 'timezone', or 'lat,long'. E.g. '-08:00', 'America/Los_Angeles', or '47.650499, -122.350070'.",
           "type": "STRING",
           "hideExpression": "(model.offset && model.offset.value && model.offset.value !== \"CUSTOM\") || false"
         },
@@ -1219,7 +1219,7 @@
         {
           "param": "custom_offset",
           "displayName": "Custom Offset",
-          "description": "Define a custom offset in the format of ±HH:mm. E.g. Plus eight and a half hours: +08:30",
+          "description": "Define a custom offset in the format of '±HH:mm', 'timezone', or 'lat,long'. E.g. '-08:00', 'America/Los_Angeles', or '47.650499, -122.350070'.",
           "type": "STRING",
           "hideExpression": "(model.offset && model.offset.value && model.offset.value !== \"CUSTOM\") || false"
         },
