@@ -38,7 +38,7 @@ module.exports = function duration (app, body) {
   }
 
 
-  if (input !== undefined && reference !== undefined) {
+  if (input != undefined && reference != undefined) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 

@@ -44,7 +44,7 @@ module.exports = function check (app, body) {
   var days = body.payload.moduleParam.days;
 
   function compare(condition, date, ref, inclusive) {
-    if (condition !== undefined && date !== undefined && ref !== undefined) {
+    if (condition != undefined && date != undefined && ref != undefined) {
       condition = (inclusive ? 'isSameOr' : 'is') + condition;
       return date[condition](ref);
     }
@@ -54,7 +54,7 @@ module.exports = function check (app, body) {
     return a.map((e) => { return e.toLowerCase(); }).indexOf(o.toLowerCase()) > -1
   }
 
-  if (input !== undefined && condition !== undefined) {
+  if (input != undefined && condition != undefined) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 

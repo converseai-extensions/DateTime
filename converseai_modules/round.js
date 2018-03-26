@@ -38,7 +38,7 @@ module.exports = function round (app, body) {
   /** @type {Number} locale Define the day that at the begining of the week. */
   var isoWeekday = body.payload.moduleParam.weekday;
 
-  if (input !== undefined && startOrEnd !== undefined && unit !== undefined) {
+  if (input != undefined && startOrEnd != undefined && unit != undefined) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 

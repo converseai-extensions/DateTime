@@ -49,7 +49,7 @@ module.exports = function parse (app, body) {
   * America/Los_Angeles. */
   var locationOffset = body.payload.moduleParam.location_offset;
 
-  if (input !== undefined && input !== null) {
+  if (input != undefined && input !== null) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 

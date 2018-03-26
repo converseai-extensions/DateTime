@@ -383,6 +383,32 @@ describe('Manipulate Date/Time & Duration', function () {
     }, done, 'manipulate');
   })
 
+  it('Set hours with ISO_8601 input (2018-03-22T16:14:06+00:00) with null', function(done) {
+    testDate({
+      input: {"date":22,"hours":16,"isDate":true,"isValid":true,"iso":"2018-03-22T16:14:06+00:00","milliseconds":0,"minutes":14,"months":3,"offset":"+00:00","seconds":6,"unix":1521735246,"utc":"2018-03-22T16:14:06+00:00","years":2018},
+      operation: 'Set',
+      years: null,
+      months: null,
+      days: null,
+      hours: '17',
+      minutes: '0',
+      seconds: '0',
+      iso: null,
+    }, {
+      years: 2018,
+      months: 3,
+      date: 22,
+      hours: 17,
+      minutes: 0,
+      seconds: 0,
+      iso: '2018-03-22T17:00:00+00:00',
+      utc: '2018-03-22T17:00:00+00:00',
+      unix: 1521738000,
+      offset: '+00:00',
+      isValid: true
+    }, done, 'manipulate');
+  })
+
   it('Set minutes with ISO_8601 input (2017-07-02T21:30:00+00:00)', function(done) {
     testDate({
       input: '2017-07-02T21:30:00+00:00',

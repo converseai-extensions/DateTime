@@ -36,7 +36,7 @@ module.exports = function manipulate (app, body) {
 
   function operate(date, operation, unit, modifier) {
     var value = body.payload.moduleParam[unit];
-    if (value !== undefined && date[operation]) {
+    if (value != undefined && date[operation]) {
       value = modifier && modifier(value) || value;
       if (operation === 'set') {
         if (unit === 'months') value --;
@@ -48,7 +48,7 @@ module.exports = function manipulate (app, body) {
     }
   }
 
-  if (input !== undefined && operation !== undefined) {
+  if (input != undefined && operation != undefined) {
     /** @type {ModuleResponse} response The Converse AI response to respond with. */
     var response = new ModuleResponse();
 
